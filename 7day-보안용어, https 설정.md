@@ -16,7 +16,7 @@
 
 8. TLS(Transport Layer Security) : 예전에는 ssl로 알려졌으나 3버전부터 TLS v1로 바뀌었음. TLS자체는 독립적인 보안 프로토콜로서 http위에 TLS를 올린 것이 https
 
-    -> openssl(웹브라우저와 서버간의 통신을 암호화하는 오픈소스 라이브러리)을 통해 개인키 공개키를 생성하고 CSR - certificate signing request를 생성하거나 또는 이를 통해 인증서(CP)를 요청할 수 있음
+    -> openssl(웹브라우저와 서버간의 통신을 암호화하는 오픈소스 라이브러리)을 통해 개인키 공개키를 생성하고 CSR - certificate signing request를 생성하거나 또는 이를 통해 인증서(CA)를 생성 또는, 요청할 수 있음
 
    ​      but, 공인인증기관을 통해 인증서를 받으려면 추가적인 정보를 더 보내야함
 
