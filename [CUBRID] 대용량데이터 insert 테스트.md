@@ -6,6 +6,70 @@
 
 *4천건의 데이터를 한번에 insert하는것을 기준.
 
+### 결과 : 3, 1번 방법인 value값에 INSERT INTO table VALUES ('값'), ('값'), ('값'); 으로 넣는 방법이 훨씬 빠르다.
+
+3. array형식으로 preparedstatment 적용 
+   - 생성자 함수를 통해 초기변수설정을 해두고 preparestatement방식을 적용. 매우 만족.
+
+```java
+@SpringBootTest
+public class Whitedefense01ApplicationTests {
+
+	private static Integer LENGTH = 4000;
+	private static Integer FIELD_LENGTH = 10;
+	private static Connection CONN;
+	private static PreparedStatement PSMT;
+
+	public Whitedefense01ApplicationTests() throws Exception {
+		System.out.println("test확인");
+		String sql = "INSERT INTO tbl_insert_test (t1, t2, t3, t4, t5, t6, t7, t8, t9, t10) VALUES ";
+		for (int i = 1; i <= LENGTH; i++) {
+			if (i != LENGTH) {
+				sql += "(?,?,?,?,?,?,?,?,?,?),";
+			} else {
+				sql += "(?,?,?,?,?,?,?,?,?,?)";
+			}
+		}
+		Class.forName("cubrid.jdbc.driver.CUBRIDDriver");
+		this.CONN = DriverManager.getConnection("jdbc:CUBRID:192.168.65.82:33000:TACS_WL:::?charSet=utf8", "tacswl", "tacs4284@@");
+		this.PSMT = CONN.prepareStatement(sql);
+	}
+
+	@Test
+	public void insert_test() {
+		try {
+			long beforeTime = System.currentTimeMillis();
+			for (int i = 1; i <= LENGTH * FIELD_LENGTH; i = i + FIELD_LENGTH) {
+				PSMT.setString(i, "test" + i);
+				PSMT.setString(i + 1, "test" + i + 1);
+				PSMT.setString(i + 2, "test" + i + 2);
+				PSMT.setString(i + 3, "test" + i + 3);
+				PSMT.setString(i + 4, "test" + i + 4);
+				PSMT.setString(i + 5, "test" + i + 5);
+				PSMT.setString(i + 6, "test" + i + 6);
+				PSMT.setString(i + 7, "test" + i + 7);
+				PSMT.setString(i + 8, "test" + i + 8);
+				PSMT.setString(i + 9, "test" + i + 9);
+			}
+			PSMT.executeUpdate();
+			long afterTime = System.currentTimeMillis();
+			Double secDiffTime = (afterTime - beforeTime) / 1000.0;
+			System.out.println("시간차이 array(s) : " + secDiffTime);
+			// System.out.println(arr.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+//////////걸린시간(2번째부터) array(s) : 0.908  // 첫 insert는 9초
+
+}
+```
+
+
+
+===========================================================================
+
 #### 결과 : 1번 방법인 value값에 INSERT INTO table VALUES ('값'), ('값'), ('값'); 으로 넣는 방법이 훨씬 빠르다.
 
 1.array형식으로 insert하는 방법
